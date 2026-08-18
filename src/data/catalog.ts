@@ -1,0 +1,4 @@
+import type { CatalogItem } from '../types/item.js';
+export const CATALOG: CatalogItem[] = [
+{id:'ion',name:'ION DUST',type:'Trail',price:240,a:'#7d8ca9',b:'#4a5167'},{id:'ghost',name:'GHOSTLINE',type:'Trail',price:980,a:'#b0c8ff',b:'#6672a7'},{id:'volt',name:'VOLT HEX',type:'Frame',price:1150,a:'#55f6ff',b:'#3f6bff'},{id:'fang',name:'NEON FANG',type:'Frame',price:2450,a:'#61e9ff',b:'#ff5f9f'},{id:'prism',name:'PRISM NODE',type:'Core Skin',price:2750,a:'#7effe5',b:'#ff73d7'},{id:'phase',name:'PHASE BLOOM',type:'Goal FX',price:3100,a:'#ff68db',b:'#7e5dff'},{id:'sun',name:'SUNFORGE CORE',type:'Core Skin',price:5900,a:'#ffe05d',b:'#ff6e38'},{id:'aurora',name:'AURORA DRIFT',type:'Trail',price:6800,a:'#72fbff',b:'#705cff'},{id:'nova',name:'NOVA PULSE',type:'Goal FX',price:7900,a:'#ffdc76',b:'#ff5a9f'}];
+export const itemById=(id:string):CatalogItem|undefined=>CATALOG.find(item=>item.id===id);

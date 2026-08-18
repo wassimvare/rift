@@ -1,0 +1,8 @@
+import type { InventoryType, ModeId, Outcome, TouchLayout } from './game.js';
+export interface InventoryItem { uid:string; id:string; acquiredAt:number; }
+export interface MatchHistoryEntry { id:string;at:number;mode:ModeId|string;scoreA:number;scoreB:number;outcome:Outcome;overtime:boolean;credits:number;xp:number; }
+export interface KeyMap { up:string;down:string;left:string;right:string;dash:string;pulse:string;polarity:string;burst:string;pause:string; }
+export interface PlayerSettings { audio:boolean;haptics:boolean;cameraShake:boolean;joystickSensitivity:number;touchScale:number;touchInset:number;touchLayout:TouchLayout;controller:boolean;keymap:KeyMap; }
+export interface PlayerStats { matches:number;wins:number;losses:number;goalsFor:number;goalsAgainst:number;streak:number;bestStreak:number;abandoned:number; }
+export interface PlayerState { saveVersion:number;credits:number;shards:number;selectedMode:ModeId;inventory:InventoryItem[];equippedItems:Record<InventoryType,string|null>;xp:number;level:number;stats:PlayerStats;settings:PlayerSettings;missions:unknown[];matchHistory:MatchHistoryEntry[]; }
+export interface StorageLike { getItem(key:string):string|null; setItem(key:string,value:string):void; }

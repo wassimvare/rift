@@ -1,0 +1,2 @@
+import type { ModeConfig, ModeId } from '../types/game.js';
+export const MODES:Record<ModeId,ModeConfig>={ranked:{name:'RIFT RANKED',time:180,goal:5,rewardWin:620,rewardLoss:260,xpWin:120,xpLoss:55,coreSpeed:1,ai:.98},quick:{name:'QUICK DUEL',time:150,goal:4,rewardWin:430,rewardLoss:190,xpWin:90,xpLoss:45,coreSpeed:1.04,ai:.94},blitz:{name:'RIFT BLITZ',time:90,goal:3,rewardWin:300,rewardLoss:130,xpWin:62,xpLoss:32,coreSpeed:1.12,ai:1.02}};

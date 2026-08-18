@@ -1,0 +1,3 @@
+import type { GameplayConfig } from '../types/game.js';
+export const ARENA=Object.freeze({width:1280,height:720,wall:52,goalHalfHeight:115});
+export const GAMEPLAY:GameplayConfig=Object.freeze({playerAcceleration:.86,playerMovingFriction:.918,playerIdleFriction:.82,playerMaxSpeed:9.8,dashImpulse:12.4,dashCooldown:1.45,dashActive:.18,perfectDashMultiplier:1.52,perfectDashFlux:18,pulseRange:285,pulseCooldown:.68,pulseMinForce:4.4,pulseMaxForce:16.8,pulseComboMultiplier:1.16,burstRange:445,burstForce:25.5,coreFriction:.996,coreMaxSpeed:20.5,wallRestitution:.92,maxSubsteps:5,substepTravel:12,controllerDeadzone:.16});
