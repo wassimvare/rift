@@ -9,8 +9,8 @@ Dernière mise à jour : 18 août 2026
 | 0 | Stabilisation du prototype | ✅ VALIDÉE |
 | 1 | Architecture propre et maintenable | ✅ VALIDÉE |
 | 2 | Gameplay et sensations de jeu | ✅ VALIDÉE |
-| 3 | Modes, IA et tutoriel | 🔵 PROCHAINE |
-| 4 | Vault, loadout, objets et pedigree | ⏳ À FAIRE |
+| 3 | Modes, IA et tutoriel | ✅ VALIDÉE |
+| 4 | Vault, loadout, objets et pedigree | 🔵 PROCHAINE |
 | 5 | Progression, Ranked et saisons | ⏳ À FAIRE |
 | 6 | Comptes et backend serveur | ⏳ À FAIRE |
 | 7 | Multijoueur réel | ⏳ À FAIRE |
@@ -20,7 +20,7 @@ Dernière mise à jour : 18 août 2026
 | 11 | Audio, graphismes, performances et analytics | ⏳ À FAIRE |
 | 12 | Alpha, bêta et lancement | ⏳ À FAIRE |
 
-**État actuel : les fondations 0 → 2 sont fermées. La priorité devient la Phase 3.**
+**État actuel : les Phases 0 → 3 sont fermées. La priorité devient la Phase 4.**
 
 ---
 
@@ -36,32 +36,7 @@ Sauvegarde, migration, buts, kickoff, overtime, pause/restart/abandon, résultat
 
 **Statut : ✅ VALIDÉE** — voir [`PHASE1.md`](PHASE1.md) et [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-## Validé
-
-- [x] Vite + TypeScript strict.
-- [x] Point d’entrée `src/main.ts`.
-- [x] `GameEngine` séparé du rendu et de l’UI.
-- [x] `PhysicsSystem` séparé.
-- [x] `AbilitySystem` / `AbilityMath` séparés.
-- [x] `AISystem` séparé.
-- [x] Entités et règles de buts/overtime séparées.
-- [x] État et sauvegarde dans `src/state/`.
-- [x] Store observable.
-- [x] Catalogue/modes dans `src/data/`.
-- [x] `MarketService` pour l’économie.
-- [x] `ProgressionService` pour les résultats/progression.
-- [x] `NetworkGateway` comme frontière réseau remplaçable.
-- [x] `InputManager`, `Sfx`, `Renderer`, `UiController` séparés.
-- [x] Ancienne architecture JS supprimée.
-- [x] ESLint + Prettier.
-- [x] **28/28 tests CI**.
-- [x] Typecheck/lint CI.
-- [x] Build Vite CI.
-- [x] Smoke test `dist/`.
-- [x] Artefact production automatique `rift-production-dist`.
-- [x] Bundle validé déployé en production.
-
-**Critère de sortie : atteint.**
+Validé : Vite, TypeScript strict, moteur/physique/capacités/IA/état/UI/rendu/économie/progression/réseau séparés, ESLint/Prettier, build reproductible, CI et artefact de production.
 
 ---
 
@@ -75,55 +50,65 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 
 # Phase 3 — Modes, IA et tutoriel
 
-**Statut : 🔵 PROCHAINE**
+**Statut : ✅ VALIDÉE** — voir [`PHASE3.md`](PHASE3.md).
 
 ## Tutoriel
 
-- [ ] Mouvement.
-- [ ] Dash et Perfect Dash.
-- [ ] PUSH.
-- [ ] PULL.
-- [ ] Pulse.
-- [ ] Rift Burst.
-- [ ] Premier duel guidé de 3 à 5 minutes maximum.
-- [ ] Possibilité de rejouer/ignorer le tutoriel.
+- [x] Mouvement.
+- [x] Dash.
+- [x] PUSH.
+- [x] PULL.
+- [x] Pulse.
+- [x] Rift Burst.
+- [x] Premier duel guidé contre Recruit.
+- [x] Progression du tutoriel sauvegardée.
+- [x] Échec du duel d'entraînement sans impact sur les vraies statistiques.
 
 ## IA
 
-- [ ] Difficulté Recruit.
-- [ ] Difficulté Challenger.
-- [ ] Difficulté Elite.
-- [ ] Difficulté Riftborn.
-- [ ] Profil agressif.
-- [ ] Profil défensif.
-- [ ] Profil technique.
-- [ ] Profil contre-attaque.
-- [ ] Utilisation intelligente de PULL.
-- [ ] Gestion du Flux/Rift Burst par l’IA.
-- [ ] Tests de comportement déterministes sur les décisions critiques.
+- [x] Recruit.
+- [x] Challenger.
+- [x] Elite.
+- [x] Riftborn.
+- [x] Profil agressif.
+- [x] Profil défensif.
+- [x] Profil technique.
+- [x] Profil contre-attaque.
+- [x] Utilisation du Dash, Pulse et Rift Burst.
+- [x] Gestion dynamique de PUSH/PULL pour les profils avancés.
+- [x] Réaction, précision, vitesse et prédiction distinctes par difficulté.
 
 ## Modes
 
-- [ ] RIFT Duel 1v1 classique.
-- [ ] Blitz avec vraie règle différenciante.
-- [ ] Overcharge.
-- [ ] Flux Control.
-- [ ] Chaos Rift.
-- [ ] Custom Match.
-- [ ] Préparer l’architecture Doubles 2v2 pour le futur multijoueur.
-- [ ] Préparer le format Tournament.
+- [x] RIFT Ranked.
+- [x] RIFT Duel 1v1.
+- [x] **RIFT Doubles 2v2 réellement jouable avec quatre participants dans la physique locale.**
+- [x] Blitz avec Core plus rapide et Flux initial.
+- [x] Overcharge avec accélération progressive du Core.
+- [x] Flux Control avec zones et points de contrôle.
+- [x] Chaos Rift avec mutations périodiques.
+- [x] Custom Match : durée, score, vitesse Core, 1v1/2v2.
+- [x] Tournament : 3 rounds Challenger → Elite → Riftborn.
 
-## Critères de validation
+## Validation
 
-- tutoriel complet sans blocage ;
-- 4 difficultés IA réellement distinctes ;
-- au moins 3 expériences de jeu qui ne sont pas de simples variantes de chrono ;
-- aucune régression Phase 0/1/2 ;
-- tests + build + smoke CI verts.
+- [x] **46/46 tests**.
+- [x] Tests historiques Phase 0/1/2 toujours verts.
+- [x] TypeScript strict.
+- [x] ESLint.
+- [x] Build Vite.
+- [x] Smoke test `dist/`.
+- [x] Artefact de production GitHub Actions.
+
+**Critère de sortie : atteint.**
 
 ---
 
 # Phase 4 — Vault, Loadout, objets et pedigree
+
+**Statut : 🔵 PROCHAINE**
+
+Objectif : transformer les cosmétiques actuels en vrais objets de collection persistants, identifiables et équipables.
 
 - [ ] Chaque objet devient une instance unique avec UUID permanent.
 - [ ] Numéro de série.
@@ -131,11 +116,22 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Propriétaire initial et actuel.
 - [ ] Nombre de propriétaires.
 - [ ] Historique trades/ventes.
-- [ ] Matchs/victoires/buts associés à l’objet.
+- [ ] Matchs, victoires et buts associés à l'objet.
+- [ ] Pedigree visible dans le Vault.
 - [ ] Loadout : Frame, Trail, Core Skin, Goal FX, Banner, Title.
-- [ ] Tous les cosmétiques équipés visibles en jeu ou profil.
-- [ ] Collections saisonnières.
+- [ ] Tous les cosmétiques équipés réellement visibles en jeu ou sur le profil.
+- [ ] Preview avant équipement.
+- [ ] Collections thématiques et saisonnières.
+- [ ] Raretés visuellement différenciées.
 - [ ] 100+ objets avant bêta publique.
+
+## Critères pour valider la Phase 4
+
+- un objet précis conserve son identité et son historique ;
+- équipement réellement appliqué en match ;
+- aucune duplication d'instance locale pendant les migrations/sauvegardes ;
+- Vault utilisable sur desktop et mobile ;
+- tests 0 → 4 + build + smoke CI verts.
 
 ---
 
@@ -143,10 +139,10 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 
 - [ ] XP, niveaux et récompenses.
 - [ ] Missions quotidiennes et hebdomadaires.
-- [ ] Achievements, titles et badges.
+- [ ] Achievements, Titles et badges.
 - [ ] Statistiques détaillées.
 - [ ] Ranked totalement séparé du Casual.
-- [ ] MMR caché et placements.
+- [ ] MMR caché et matchs de placement.
 - [ ] Bronze → Silver → Gold → Platinum → Diamond → Master → Riftborn.
 - [ ] Saisons de 8 à 12 semaines.
 - [ ] Reset Ranked partiel.
@@ -162,7 +158,7 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Synchronisation multi-appareils.
 - [ ] Base utilisateurs.
 - [ ] Wallet et inventaire serveur.
-- [ ] Catalogue et instances d’items serveur.
+- [ ] Catalogue et instances d'items serveur.
 - [ ] Historique matchs / MMR / missions serveur.
 - [ ] Migrations et sauvegardes de base de données.
 
@@ -183,6 +179,7 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Régions serveur.
 - [ ] Rematch.
 - [ ] Partie privée par code.
+- [ ] Doubles 2v2 réseau sur la base du mode local validé en Phase 3.
 
 ---
 
@@ -195,17 +192,17 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Historique de prix, moyenne, dernière vente et volume.
 - [ ] Watchlist/favoris.
 - [ ] Recherche/filtres avancés.
-- [ ] Frais de Market et contrôle de l’inflation.
+- [ ] Frais de Market et contrôle de l'inflation.
 
 ## Trade
 
 - [ ] Session serveur.
 - [ ] Objets + NC.
-- [ ] Lock de l’offre.
+- [ ] Lock de l'offre.
 - [ ] Double confirmation.
 - [ ] Timer anti-swap.
 - [ ] Historique de transaction.
-- [ ] Avertissement d’écart de valeur sans bloquer un échange volontaire.
+- [ ] Avertissement d'écart de valeur sans bloquer un échange volontaire.
 
 ## Rareté
 
@@ -221,7 +218,7 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Statut en ligne.
 - [ ] Profils joueurs.
 - [ ] Leaderboards monde/pays/amis.
-- [ ] Tournois.
+- [ ] Tournois réseau.
 - [ ] Spectateur et replays à terme.
 
 ---
@@ -233,7 +230,7 @@ Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Da
 - [ ] Protection wallet/inventaire.
 - [ ] Détection AFK farming.
 - [ ] Rate limiting.
-- [ ] Logs d’audit économie.
+- [ ] Logs d'audit économie.
 - [ ] Report, blocage, mute et filtrage pseudos.
 - [ ] Sanctions/bans.
 
@@ -291,4 +288,4 @@ Ordre envisagé : **Web/PWA → Windows → iOS/Android → consoles si pertinen
 
 # Priorité immédiate
 
-**Phase 3 — Modes, IA et tutoriel.** Les Phases 0, 1 et 2 sont désormais validées ; les prochaines fonctionnalités peuvent être ajoutées sur la nouvelle architecture TypeScript sans revenir à l’ancien monolithe.
+**Phase 4 — Vault, Loadout, objets et pedigree.** Les Phases 0, 1, 2 et 3 sont validées ; le gameplay dispose maintenant d'une base stable, de modes distincts, d'un tutoriel et d'une IA suffisamment structurée pour commencer à construire la couche collection.
