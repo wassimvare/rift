@@ -63,7 +63,6 @@ export class GameEngine{
     const mode=resolveMode(modeId,this.state.settings,this.tournamentRound);
     const doubles=mode.teamSize===2;
     const difficulty=this.resolveDifficulty(modeId,tutorial);
-    const profile=this.resolveProfile(modeId,tutorial);
     const playerY=doubles?ARENA.height/2-105:ARENA.height/2;
     const rivalY=playerY;
     const extraPlayers:BotSlot[]=[];
@@ -78,16 +77,13 @@ export class GameEngine{
       elapsed:0,controlA:0,controlB:0,chaosTimer:12,chaosEvent:null,tournamentRound:this.tournamentRound,tutorial,
     };
     this.modes.start(this.game);
-    if(tutorial)this.tutorial.prepare(this.game);
-    this.ui.setScore(0,0);this.ui.setModeAndClock(this.modeTitle(this.game),this.formatTime(mode.time));this.ui.setPauseLabel('PAUSE');this.ui.setPolarity(false);this.ui.gameView();
+    if(tutorial){this.tutorial.prepare(this.game);if(this.tutorial.current?.id!=='duel')this.game.time=Infinity;}
+    this.ui.setScore(0,0);this.ui.setModeAndClock(this.modeTitle(this.game),tutorial?'TRAIN':this.formatTime(this.game.time));this.ui.setPauseLabel('PAUSE');this.ui.setPolarity(false);this.ui.gameView();
     if(tutorial)this.showTutorialStep();else this.ui.tutorialPrompt('', '', 0, false);
     this.countdown(3,()=>this.beginPlay());
   }
 
-  startTutorial():void{
-    this.tutorial.start();
-    this.startMatch(false,true);
-  }
+  startTutorial():void{this.tutorial.start();this.startMatch(false,true);}
 
   pause():void{
     const game=this.game;if(!game||game.ended||!['play','paused'].includes(game.phase))return;
@@ -107,10 +103,7 @@ export class GameEngine{
     this.ui.bindConfirm('confirmQuit',()=>this.abandon(),'cancelQuit',()=>{this.ui.closeModal();if(resume&&this.game?.phase==='paused')this.pause();});
   }
 
-  dash():void{
-    const game=this.game;if(!game)return;
-    if(this.abilities.dash(game.a,this.input.movement()))this.handleTutorial(this.tutorial.action('dash'));
-  }
+  dash():void{const game=this.game;if(game&&this.abilities.dash(game.a,this.input.movement()))this.handleTutorial(this.tutorial.action('dash'));}
   pulse():void{
     const game=this.game;if(!game)return;const polarity=game.a.polarity;
     if(this.abilities.pulse(game.a)){
@@ -119,9 +112,7 @@ export class GameEngine{
       else this.handleTutorial(this.tutorial.action('pulse'));
     }
   }
-  polarity():void{
-    const game=this.game;if(!game)return;game.a.polarity=game.a.polarity===1?-1:1;this.ui.setPolarity(game.a.polarity===-1);this.abilities.spawnRing(game.a.x,game.a.y,game.a.polarity===1?'#59f5ff':'#ff71c6',35,95,.28);this.sfx.play('toggle');this.sfx.vibrate(10);
-  }
+  polarity():void{const game=this.game;if(!game)return;game.a.polarity=game.a.polarity===1?-1:1;this.ui.setPolarity(game.a.polarity===-1);this.abilities.spawnRing(game.a.x,game.a.y,game.a.polarity===1?'#59f5ff':'#ff71c6',35,95,.28);this.sfx.play('toggle');this.sfx.vibrate(10);}
   burst():void{const game=this.game;if(game&&this.abilities.burst(game.a))this.handleTutorial(this.tutorial.action('burst'));}
   buy(id:string):void{const result=this.market.buy(id);this.ui.toast(result.message);}
   selectMode(mode:ModeId):void{this.store.update(state=>{state.selectedMode=mode;});}
@@ -144,26 +135,29 @@ export class GameEngine{
     const game=this.game;if(!game||game.phase!=='play')return;game.phase='goal';const playerScored=side==='right';const points=game.tutorial?1:this.modes.goalPoints(game);
     if(playerScored){game.scoreA+=points;game.lastScorer='player';}else{game.scoreB+=points;game.lastScorer='rival';}
     this.ui.setScore(game.scoreA,game.scoreB);this.ui.overlay(playerScored?`RIFT BREAK!<small>+${points} YOU</small>`:`RIVAL SCORES<small>+${points} RIVAL</small>`);game.shake=Math.max(game.shake,14);game.flash=Math.max(game.flash,.42);this.abilities.spawnBurst(game.ball.x,game.ball.y,playerScored?'#59f5ff':'#ff5f8f',50,10);this.sfx.play('goal');this.sfx.vibrate(playerScored?55:30);
-    if(game.tutorial&&this.tutorial.current?.id==='duel'){
-      const update=this.tutorial.goal(playerScored);if(update.completed){this.later(()=>this.finishTutorial(),700);return;}
+
+    if(game.tutorial){
+      if(this.tutorial.current?.id==='duel'){
+        if(playerScored){const update=this.tutorial.goal(true);if(update.completed){this.later(()=>this.finishTutorial(),700);return;}}
+        if(!playerScored&&game.scoreB>=2){this.tutorial.resetDuel();game.scoreA=0;game.scoreB=0;this.ui.setScore(0,0);this.ui.combat('ESSAIE ENCORE','#ffb56b',900);}
+        this.later(()=>this.resetKickoff(),720);return;
+      }
+      game.scoreA=0;game.scoreB=0;this.ui.setScore(0,0);this.later(()=>this.resetKickoff(),650);return;
     }
-    if((game.tutorial&&this.tutorial.current?.id==='duel'&&(game.scoreA>=2||game.scoreB>=2))||(!game.tutorial&&this.modes.targetReached(game))||game.overtime)this.later(()=>this.finishMatch(),760);else this.later(()=>this.resetKickoff(),720);
+
+    if(this.modes.targetReached(game)||game.overtime)this.later(()=>this.finishMatch(),760);else this.later(()=>this.resetKickoff(),720);
   }
 
-  private abandon():void{
-    const game=this.game;if(!game)return;this.clearTimers();cancelAnimationFrame(this.raf);if(!game.tutorial)this.progression.abandon(game);this.closeNetworkSession();game.ended=true;this.game=null;this.tutorial.stop();this.ui.tutorialPrompt('','',0,false);this.ui.closeModal();this.ui.menuView();this.ui.toast('Match abandonné');
-  }
+  private abandon():void{const game=this.game;if(!game)return;this.clearTimers();cancelAnimationFrame(this.raf);if(!game.tutorial)this.progression.abandon(game);this.closeNetworkSession();game.ended=true;this.game=null;this.tutorial.stop();this.ui.tutorialPrompt('','',0,false);this.ui.closeModal();this.ui.menuView();this.ui.toast('Match abandonné');}
 
   private finishMatch():void{
-    const game=this.game;if(!game||game.ended)return;this.clearTimers();game.ended=true;game.phase='result';
-    const won=game.scoreA>game.scoreB;
+    const game=this.game;if(!game||game.ended)return;if(game.tutorial)return;this.clearTimers();game.ended=true;game.phase='result';const won=game.scoreA>game.scoreB;
     if(game.mode==='tournament'&&won&&this.tournamentRound<3){
       this.closeNetworkSession();const round=this.tournamentRound;this.tournamentRound+=1;
       this.ui.showModal(`<p class="eyebrow">TOURNAMENT</p><h2>ROUND ${round} GAGNÉ</h2><div class="resultScore">${game.scoreA} — ${game.scoreB}</div><p>Prochain adversaire : ${tournamentDifficulty(this.tournamentRound).toUpperCase()}.</p><div class="modalActions"><button id="rematch" class="primary">ROUND SUIVANT</button><button id="resultMenu" class="secondary">QUITTER LE TOURNOI</button></div>`);
       this.ui.bindResult(()=>this.startMatch(true),()=>{this.game=null;this.tournamentRound=1;this.ui.closeModal();this.ui.menuView();});return;
     }
-    const reward=this.progression.complete(game);this.closeNetworkSession();
-    const title=game.mode==='tournament'&&won?'TOURNOI REMPORTÉ':reward.won?'VICTOIRE':'DÉFAITE';
+    const reward=this.progression.complete(game);this.closeNetworkSession();const title=game.mode==='tournament'&&won?'TOURNOI REMPORTÉ':reward.won?'VICTOIRE':'DÉFAITE';
     this.ui.showModal(`<p class="eyebrow">MATCH COMPLETE</p><h2>${title}</h2><div class="resultScore">${game.scoreA} — ${game.scoreB}</div><div class="resultMeta"><span class="tag">${this.modeTitle(game)}</span>${game.overtime?'<span class="tag">OVERTIME</span>':''}<span class="tag">+${reward.credits} NC</span><span class="tag">+${reward.xp} XP</span><span class="tag">+${reward.shards} ◆</span></div><div class="modalActions"><button id="rematch" class="primary">REVANCHE</button><button id="resultMenu" class="secondary">RETOUR AU MENU</button></div>`);
     this.ui.bindResult(()=>{this.tournamentRound=1;this.startMatch();},()=>{this.game=null;this.tournamentRound=1;this.ui.closeModal();this.ui.menuView();});
   }
@@ -180,15 +174,11 @@ export class GameEngine{
   private loop(now:number):void{
     const game=this.game;if(!game||game.ended)return;const dt=Math.min(.03,(now-this.last)/1000||.016);this.last=now;this.input.pollGamepad();this.physics.updateEffects(game,dt);
     if(game.phase==='play'){
-      const movement=this.input.movement();if(this.input.isDown('dash'))this.dash();
-      if(game.tutorial)this.handleTutorial(this.tutorial.tickMovement(dt,movement.magnitude));
-      const botControls=this.botControls(game,dt);
+      const movement=this.input.movement();if(this.input.isDown('dash'))this.dash();if(game.tutorial)this.handleTutorial(this.tutorial.tickMovement(dt,movement.magnitude));const botControls=this.botControls(game,dt);
       if(game.freeze>0)game.freeze=Math.max(0,game.freeze-dt);else{
-        this.physics.step(game,movement,botControls,dt);
-        const modeUpdate=this.modes.tick(game,dt);
+        this.physics.step(game,movement,botControls,dt);const modeUpdate=game.tutorial?{scoreChanged:false,event:null}:this.modes.tick(game,dt);
         if(modeUpdate.scoreChanged){this.ui.setScore(game.scoreA,game.scoreB);if(this.modes.targetReached(game)){this.finishMatch();return;}}
-        if(modeUpdate.event)this.ui.combat(modeUpdate.event,'#ffd56a',850);
-        this.matchClock(game,dt);
+        if(modeUpdate.event)this.ui.combat(modeUpdate.event,'#ffd56a',850);this.matchClock(game,dt);
       }
     }
     this.renderer.draw(game);this.updateHud(game);this.raf=requestAnimationFrame(time=>this.loop(time));
@@ -198,19 +188,20 @@ export class GameEngine{
     if(game.tutorial&&!this.tutorial.aiEnabled)return[{player:game.b,input:STILL},...game.extraPlayers.map(slot=>({player:slot.player,input:STILL}))];
     const mainDifficulty=this.resolveDifficulty(game.mode,game.tutorial),mainProfile=this.resolveProfile(game.mode,game.tutorial);
     const controls:BotControl[]=[{player:game.b,input:this.ai.update(game,dt,this.abilities,game.b,'rival',mainDifficulty,mainProfile)}];
-    for(const slot of game.extraPlayers)controls.push({player:slot.player,input:this.ai.update(game,dt,this.abilities,slot.player,slot.team,slot.difficulty,slot.profile)});
-    return controls;
+    for(const slot of game.extraPlayers)controls.push({player:slot.player,input:this.ai.update(game,dt,this.abilities,slot.player,slot.team,slot.difficulty,slot.profile)});return controls;
   }
 
   private matchClock(game:MatchState,dt:number):void{
-    if(!Number.isFinite(game.time))return;game.time-=dt;
+    if(game.tutorial&&this.tutorial.current?.id!=='duel')return;if(!Number.isFinite(game.time))return;game.time-=dt;
+    if(game.tutorial&&game.time<=0){this.tutorial.resetDuel();game.scoreA=0;game.scoreB=0;game.time=120;this.ui.setScore(0,0);this.ui.combat('TEMPS ÉCOULÉ · RECOMMENCE','#ffb56b',1000);this.resetKickoff();return;}
     if(shouldEnterOvertime(game.time,game.scoreA,game.scoreB)){game.time=Infinity;game.overtime=true;this.ui.overlay('OVERTIME<small>Prochain point = victoire</small>');this.later(()=>{if(this.game?.phase==='play')this.ui.overlay('',false);},900);}
     else if(game.time<=0)this.finishMatch();
   }
 
   private updateHud(game:MatchState):void{
-    this.ui.setClock(this.formatTime(game.time));const player=game.a,dashPct=100-Math.min(100,player.dashCd/GAMEPLAY.dashCooldown*100),pulsePct=100-Math.min(100,player.pulseCd/GAMEPLAY.pulseCooldown*100);this.ui.abilityHud(dashPct,pulsePct,player.pulseCd<=0?'OK':player.pulseCd.toFixed(1),player.flux);
-    if(game.m.rule==='overcharge')this.ui.modeStatus(`OVERCHARGE ${Math.round(game.m.coreSpeed*100)}%`);
+    this.ui.setClock(game.tutorial&&this.tutorial.current?.id!=='duel'?'TRAIN':this.formatTime(game.time));const player=game.a,dashPct=100-Math.min(100,player.dashCd/GAMEPLAY.dashCooldown*100),pulsePct=100-Math.min(100,player.pulseCd/GAMEPLAY.pulseCooldown*100);this.ui.abilityHud(dashPct,pulsePct,player.pulseCd<=0?'OK':player.pulseCd.toFixed(1),player.flux);
+    if(game.tutorial)this.ui.modeStatus('TRAINING · suis les objectifs affichés');
+    else if(game.m.rule==='overcharge')this.ui.modeStatus(`OVERCHARGE ${Math.round(game.m.coreSpeed*100)}%`);
     else if(game.m.rule==='flux')this.ui.modeStatus(`CONTROL ${Math.round(game.controlA*100)}% · ${Math.round(game.controlB*100)}%`);
     else if(game.m.rule==='chaos')this.ui.modeStatus(`NEXT CHAOS ${Math.ceil(game.chaosTimer)}s`);
     else if(game.mode==='tournament')this.ui.modeStatus(`ROUND ${this.tournamentRound}/3 · ${this.resolveDifficulty(game.mode,false).toUpperCase()}`);
@@ -218,17 +209,11 @@ export class GameEngine{
   }
 
   private handleTutorial(update:TutorialUpdate):void{
-    const game=this.game;if(!game||!game.tutorial||!update.advanced)return;
-    if(update.completed){this.finishTutorial();return;}
-    this.store.update(state=>{state.tutorial.bestStep=Math.max(state.tutorial.bestStep,this.tutorial.stepIndex);});
-    this.tutorial.prepare(game);this.showTutorialStep();
-    if(update.step?.id==='duel'){this.ui.setScore(0,0);this.resetKickoff();}
+    const game=this.game;if(!game||!game.tutorial||!update.advanced)return;if(update.completed){this.finishTutorial();return;}
+    this.store.update(state=>{state.tutorial.bestStep=Math.max(state.tutorial.bestStep,this.tutorial.stepIndex);});this.tutorial.prepare(game);this.showTutorialStep();if(update.step?.id==='duel'){this.ui.setScore(0,0);this.resetKickoff();}
   }
   private showTutorialStep():void{const step=this.tutorial.current;if(step)this.ui.tutorialPrompt(step.title,step.prompt,this.tutorial.stepIndex+1,true);}
-
-  private resolveDifficulty(mode:ModeId,tutorial:boolean):AiDifficulty{
-    if(tutorial)return'recruit';if(mode==='ranked')return'elite';if(mode==='tournament')return tournamentDifficulty(this.tournamentRound);return this.state.settings.aiDifficulty;
-  }
+  private resolveDifficulty(mode:ModeId,tutorial:boolean):AiDifficulty{if(tutorial)return'recruit';if(mode==='ranked')return'elite';if(mode==='tournament')return tournamentDifficulty(this.tournamentRound);return this.state.settings.aiDifficulty;}
   private resolveProfile(mode:ModeId,tutorial:boolean):AiProfile{if(tutorial)return'defensive';if(mode==='ranked')return'counter';if(mode==='tournament')return this.tournamentRound===1?'aggressive':this.tournamentRound===2?'technical':'counter';return this.state.settings.aiProfile;}
   private lowerDifficulty(value:AiDifficulty):AiDifficulty{return value==='riftborn'?'elite':value==='elite'?'challenger':'recruit';}
   private modeTitle(game:MatchState):string{return game.mode==='tournament'?`${game.m.name} · ROUND ${this.tournamentRound}`:game.tutorial?'RIFT TRAINING':game.m.name;}
