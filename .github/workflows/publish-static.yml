@@ -41,6 +41,18 @@ jobs:
           rm -rf docs
           cp -R dist docs
           sed -i 's|src="/assets/|src="./assets/|g; s|href="/assets/|href="./assets/|g' docs/index.html
+          python - <<'PY'
+          from pathlib import Path
+          root = Path('docs')
+          html = (root / 'index.html').read_text()
+          css = next((root / 'assets').glob('*.css')).read_text()
+          js = next((root / 'assets').glob('*.js')).read_text()
+          import re
+          html = re.sub(r'\s*<script type="module" crossorigin src="\.\/assets\/[^"]+"><\/script>', '', html)
+          html = re.sub(r'\s*<link rel="stylesheet" crossorigin href="\.\/assets\/[^"]+">', f'\n<style>{css}</style>', html)
+          html = html.replace('</body>', f'<script type="module">{js}</script>\n</body>')
+          (root / 'standalone.html').write_text(html)
+          PY
           touch docs/.nojekyll
 
       - name: Commit static build
