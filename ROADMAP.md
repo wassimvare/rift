@@ -7,9 +7,9 @@ Dernière mise à jour : 18 août 2026
 | Phase | Objectif | Statut |
 |---|---|---|
 | 0 | Stabilisation du prototype | ✅ VALIDÉE |
-| 1 | Architecture propre et maintenable | 🔵 PROCHAINE |
+| 1 | Architecture propre et maintenable | ✅ VALIDÉE |
 | 2 | Gameplay et sensations de jeu | ✅ VALIDÉE |
-| 3 | Modes, IA et tutoriel | ⏳ À FAIRE |
+| 3 | Modes, IA et tutoriel | 🔵 PROCHAINE |
 | 4 | Vault, loadout, objets et pedigree | ⏳ À FAIRE |
 | 5 | Progression, Ranked et saisons | ⏳ À FAIRE |
 | 6 | Comptes et backend serveur | ⏳ À FAIRE |
@@ -20,7 +20,7 @@ Dernière mise à jour : 18 août 2026
 | 11 | Audio, graphismes, performances et analytics | ⏳ À FAIRE |
 | 12 | Alpha, bêta et lancement | ⏳ À FAIRE |
 
-> La Phase 2 a été réalisée en avance. La **priorité immédiate reste la Phase 1** afin de rendre le code maintenable avant d'ajouter le backend et le multijoueur.
+**État actuel : les fondations 0 → 2 sont fermées. La priorité devient la Phase 3.**
 
 ---
 
@@ -28,29 +28,40 @@ Dernière mise à jour : 18 août 2026
 
 **Statut : ✅ VALIDÉE** — voir [`PHASE0.md`](PHASE0.md).
 
-Validé : sauvegarde versionnée, migration, installation neuve, Market persistant, buts, kickoff, overtime, pause/restart/abandon, écran de résultat, revanche, historique, récupération du Core et tests automatiques.
+Sauvegarde, migration, buts, kickoff, overtime, pause/restart/abandon, résultats, historique, récupération du Core et tests de non-régression sont validés.
 
 ---
 
 # Phase 1 — Architecture propre et maintenable
 
-**Statut : 🔵 PROCHAINE**
+**Statut : ✅ VALIDÉE** — voir [`PHASE1.md`](PHASE1.md) et [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-Objectif : pouvoir développer RIFT rapidement sans recréer de régressions.
+## Validé
 
-- [ ] Passer à Vite.
-- [ ] Passer le code critique en TypeScript.
-- [ ] Séparer moteur de jeu, UI, économie, progression et réseau.
-- [ ] Modules dédiés : `GameEngine`, `Physics`, `Player`, `RiftCore`, `Goals`, `Abilities`, `AI`.
-- [ ] Gestionnaire d'état global.
-- [ ] Données d'items séparées du gameplay.
-- [ ] ESLint / formatage.
-- [ ] Tests unitaires par module et smoke build.
-- [ ] Compatibilité sauvegarde Phase 0/2.
-- [ ] Jouabilité desktop + mobile conservée.
-- [ ] Déploiement automatique après CI.
+- [x] Vite + TypeScript strict.
+- [x] Point d’entrée `src/main.ts`.
+- [x] `GameEngine` séparé du rendu et de l’UI.
+- [x] `PhysicsSystem` séparé.
+- [x] `AbilitySystem` / `AbilityMath` séparés.
+- [x] `AISystem` séparé.
+- [x] Entités et règles de buts/overtime séparées.
+- [x] État et sauvegarde dans `src/state/`.
+- [x] Store observable.
+- [x] Catalogue/modes dans `src/data/`.
+- [x] `MarketService` pour l’économie.
+- [x] `ProgressionService` pour les résultats/progression.
+- [x] `NetworkGateway` comme frontière réseau remplaçable.
+- [x] `InputManager`, `Sfx`, `Renderer`, `UiController` séparés.
+- [x] Ancienne architecture JS supprimée.
+- [x] ESLint + Prettier.
+- [x] **28/28 tests CI**.
+- [x] Typecheck/lint CI.
+- [x] Build Vite CI.
+- [x] Smoke test `dist/`.
+- [x] Artefact production automatique `rift-production-dist`.
+- [x] Bundle validé déployé en production.
 
-**Critère de sortie :** plus de gros fichier monolithique, build reproductible, tests 0/2 verts, architecture documentée et production déployable automatiquement.
+**Critère de sortie : atteint.**
 
 ---
 
@@ -58,81 +69,71 @@ Objectif : pouvoir développer RIFT rapidement sans recréer de régressions.
 
 **Statut : ✅ VALIDÉE** — voir [`PHASE2.md`](PHASE2.md).
 
-## Mouvement / physique
-
-- [x] Accélération et décélération précises.
-- [x] Inertie/friction centralisées et testées.
-- [x] Collisions joueur/Core renforcées.
-- [x] Rebond cohérent sur les parois.
-- [x] Sous-étapes physiques pour les grandes vitesses.
-- [x] Rythme du Core ajusté par mode.
-
-## Dash
-
-- [x] Dash plus lisible et puissant.
-- [x] Trail, onde et particules.
-- [x] Feedback sonore/haptique.
-- [x] Perfect Dash fonctionnel, limité à une activation par Dash.
-
-## PUSH / PULL
-
-- [x] Identité cyan / rose-violet.
-- [x] Portée visible.
-- [x] Falloff selon distance.
-- [x] Cooldown Pulse visible.
-- [x] Combo Dash + Pulse.
-
-## Pulse / Rift Burst
-
-- [x] Pulse plus lisible et anti-spam.
-- [x] Burst à 100 % Flux avec impulsion, hit-stop, flash, shake et particules.
-- [x] Force du Burst dépendante de la distance.
-
-## Contrôles
-
-- [x] Remapping clavier sauvegardé.
-- [x] Support manette Gamepad API.
-- [x] Deadzone manette.
-- [x] Sensibilité joystick mobile.
-- [x] Taille et position tactile réglables.
-- [x] Layout droitier/gaucher.
-- [x] Audio, haptique et camera shake configurables.
-
-**Validation : 21/21 tests Node + smoke tests desktop/mobile sans erreur JavaScript.**
+Validé : accélération/inertie, collisions, sous-étapes physiques, Perfect Dash, PUSH/PULL, Pulse avec falloff, combo Dash + Pulse, Rift Burst, feedback visuel/sonore/haptique, manette, remapping et réglages tactiles.
 
 ---
 
 # Phase 3 — Modes, IA et tutoriel
 
+**Statut : 🔵 PROCHAINE**
+
 ## Tutoriel
-- [ ] Mouvement, Dash, PUSH, PULL, Pulse, Rift Burst.
-- [ ] Premier duel guidé.
+
+- [ ] Mouvement.
+- [ ] Dash et Perfect Dash.
+- [ ] PUSH.
+- [ ] PULL.
+- [ ] Pulse.
+- [ ] Rift Burst.
+- [ ] Premier duel guidé de 3 à 5 minutes maximum.
+- [ ] Possibilité de rejouer/ignorer le tutoriel.
 
 ## IA
-- [ ] Difficultés Recruit / Challenger / Elite / Riftborn.
-- [ ] Profils agressif, défensif, technique, contre-attaque.
-- [ ] Utilisation intelligente de PULL et du Burst.
+
+- [ ] Difficulté Recruit.
+- [ ] Difficulté Challenger.
+- [ ] Difficulté Elite.
+- [ ] Difficulté Riftborn.
+- [ ] Profil agressif.
+- [ ] Profil défensif.
+- [ ] Profil technique.
+- [ ] Profil contre-attaque.
+- [ ] Utilisation intelligente de PULL.
+- [ ] Gestion du Flux/Rift Burst par l’IA.
+- [ ] Tests de comportement déterministes sur les décisions critiques.
 
 ## Modes
-- [ ] RIFT Duel 1v1.
-- [ ] Doubles 2v2.
-- [ ] Blitz avec règle propre.
+
+- [ ] RIFT Duel 1v1 classique.
+- [ ] Blitz avec vraie règle différenciante.
 - [ ] Overcharge.
 - [ ] Flux Control.
 - [ ] Chaos Rift.
 - [ ] Custom Match.
-- [ ] Tournament.
+- [ ] Préparer l’architecture Doubles 2v2 pour le futur multijoueur.
+- [ ] Préparer le format Tournament.
+
+## Critères de validation
+
+- tutoriel complet sans blocage ;
+- 4 difficultés IA réellement distinctes ;
+- au moins 3 expériences de jeu qui ne sont pas de simples variantes de chrono ;
+- aucune régression Phase 0/1/2 ;
+- tests + build + smoke CI verts.
 
 ---
 
 # Phase 4 — Vault, Loadout, objets et pedigree
 
-- [ ] Instance unique par objet avec UUID permanent.
-- [ ] Numéro de série, date de création, propriétaire initial/actuel.
-- [ ] Nombre de propriétaires et historique trades/ventes.
-- [ ] Matchs/victoires/buts associés à l'objet.
+- [ ] Chaque objet devient une instance unique avec UUID permanent.
+- [ ] Numéro de série.
+- [ ] Date de création.
+- [ ] Propriétaire initial et actuel.
+- [ ] Nombre de propriétaires.
+- [ ] Historique trades/ventes.
+- [ ] Matchs/victoires/buts associés à l’objet.
 - [ ] Loadout : Frame, Trail, Core Skin, Goal FX, Banner, Title.
-- [ ] Tous les cosmétiques équipés réellement visibles.
+- [ ] Tous les cosmétiques équipés visibles en jeu ou profil.
 - [ ] Collections saisonnières.
 - [ ] 100+ objets avant bêta publique.
 
@@ -141,60 +142,85 @@ Objectif : pouvoir développer RIFT rapidement sans recréer de régressions.
 # Phase 5 — Progression, Ranked et saisons
 
 - [ ] XP, niveaux et récompenses.
-- [ ] Missions quotidiennes/hebdomadaires.
-- [ ] Achievements, titles, badges, statistiques.
-- [ ] Ranked séparé du Casual.
+- [ ] Missions quotidiennes et hebdomadaires.
+- [ ] Achievements, titles et badges.
+- [ ] Statistiques détaillées.
+- [ ] Ranked totalement séparé du Casual.
 - [ ] MMR caché et placements.
 - [ ] Bronze → Silver → Gold → Platinum → Diamond → Master → Riftborn.
-- [ ] Saisons de 8 à 12 semaines et reset partiel.
+- [ ] Saisons de 8 à 12 semaines.
+- [ ] Reset Ranked partiel.
 - [ ] Récompenses saisonnières.
 
 ---
 
 # Phase 6 — Comptes et backend serveur
 
-- [ ] Inscription/connexion, pseudo unique, profil, récupération.
+- [ ] Inscription/connexion.
+- [ ] Pseudo unique et profil public.
+- [ ] Récupération de compte.
 - [ ] Synchronisation multi-appareils.
-- [ ] Base utilisateurs, wallet, inventaire, item instances.
-- [ ] Historique matchs et MMR serveur.
-- [ ] Missions serveur, migrations, sauvegardes/restauration.
+- [ ] Base utilisateurs.
+- [ ] Wallet et inventaire serveur.
+- [ ] Catalogue et instances d’items serveur.
+- [ ] Historique matchs / MMR / missions serveur.
+- [ ] Migrations et sauvegardes de base de données.
 
-À partir d'ici, **le client ne doit plus être la source de vérité** pour crédits, objets ou résultats compétitifs.
+À partir de cette phase, **le client ne sera plus la source de vérité** pour les crédits, objets ou résultats compétitifs.
 
 ---
 
 # Phase 7 — Multijoueur réel
 
-- [ ] Matchmaking 1v1 et serveur autoritaire.
+- [ ] Matchmaking 1v1.
+- [ ] Serveur autoritaire.
 - [ ] Synchronisation joueurs/Core.
-- [ ] Client prediction, reconciliation et interpolation.
-- [ ] Gestion latence/reconnexion.
-- [ ] Abandons/pénalités et régions serveur.
-- [ ] Rematch et partie privée par code.
+- [ ] Client prediction.
+- [ ] Server reconciliation.
+- [ ] Interpolation.
+- [ ] Gestion latence et reconnexion.
+- [ ] Abandons/pénalités.
+- [ ] Régions serveur.
+- [ ] Rematch.
+- [ ] Partie privée par code.
 
 ---
 
 # Phase 8 — Market et Trade joueur-à-joueur
 
 ## Market
-- [ ] Listings réels et transactions atomiques serveur.
-- [ ] Historique prix, moyenne, dernière vente, volume.
-- [ ] Watchlist, recherche/filtres et frais de Market.
+
+- [ ] Listings réels.
+- [ ] Transactions atomiques serveur.
+- [ ] Historique de prix, moyenne, dernière vente et volume.
+- [ ] Watchlist/favoris.
+- [ ] Recherche/filtres avancés.
+- [ ] Frais de Market et contrôle de l’inflation.
 
 ## Trade
-- [ ] Session serveur, objets + NC, lock, double confirmation, timer anti-swap.
-- [ ] Historique transaction et avertissement d'écart de valeur.
+
+- [ ] Session serveur.
+- [ ] Objets + NC.
+- [ ] Lock de l’offre.
+- [ ] Double confirmation.
+- [ ] Timer anti-swap.
+- [ ] Historique de transaction.
+- [ ] Avertissement d’écart de valeur sans bloquer un échange volontaire.
 
 ## Rareté
-- [ ] Stocks limités garantis.
-- [ ] Séries uniques à vie, aucune duplication.
+
+- [ ] Stocks limités garantis côté serveur.
+- [ ] Numéros de série uniques à vie.
+- [ ] Aucune duplication possible.
 
 ---
 
 # Phase 9 — Social et compétitif
 
-- [ ] Amis, invitations, party, présence.
-- [ ] Profils et leaderboards monde/pays/amis.
+- [ ] Amis, invitations et party.
+- [ ] Statut en ligne.
+- [ ] Profils joueurs.
+- [ ] Leaderboards monde/pays/amis.
 - [ ] Tournois.
 - [ ] Spectateur et replays à terme.
 
@@ -202,40 +228,55 @@ Objectif : pouvoir développer RIFT rapidement sans recréer de régressions.
 
 # Phase 10 — Sécurité, anti-cheat et modération
 
-- [ ] Validation serveur des résultats.
-- [ ] Anti speed-hack/téléportation/Core hack.
+- [ ] Validation serveur de tous les résultats.
+- [ ] Anti speed-hack / téléportation / manipulation du Core.
 - [ ] Protection wallet/inventaire.
-- [ ] Détection AFK farming et rate limiting.
-- [ ] Logs d'audit économie.
-- [ ] Report, blocage, mute, filtrage pseudos, sanctions/bans.
+- [ ] Détection AFK farming.
+- [ ] Rate limiting.
+- [ ] Logs d’audit économie.
+- [ ] Report, blocage, mute et filtrage pseudos.
+- [ ] Sanctions/bans.
 
 ---
 
 # Phase 11 — Polish, performances et analytics
 
 ## Audio / visuel
+
 - [ ] Musique menu et ambiance arène.
 - [ ] Bibliothèque SFX finale.
-- [ ] Shaders/failles, Goal FX, intro, MVP/victoire, plusieurs arènes.
+- [ ] Shaders/failles.
+- [ ] Goal explosions.
+- [ ] Intro de match et écran MVP/victoire.
+- [ ] Plusieurs arènes.
 
 ## Performances
-- [ ] 60 FPS stable, 120 FPS optionnel.
-- [ ] Profils Low/Medium/High.
-- [ ] Optimisation chauffe/batterie et safe areas mobiles.
+
+- [ ] 60 FPS stable.
+- [ ] 120 FPS optionnel.
+- [ ] Profils Low / Medium / High.
+- [ ] Optimisation chauffe/batterie mobile.
+- [ ] Safe areas iPhone/Android.
 
 ## Analytics
-- [ ] Sessions, matchs/session, tutoriel, rétention J1/J7/J30.
-- [ ] Modes, économie/trades et crash monitoring.
+
+- [ ] Sessions et matchs/session.
+- [ ] Taux de fin du tutoriel.
+- [ ] Rétention J1/J7/J30.
+- [ ] Modes joués.
+- [ ] Économie/trades.
+- [ ] Crash/error monitoring.
 
 ---
 
 # Phase 12 — Alpha, bêta et lancement
 
-- [ ] Alpha 1 ~10 joueurs.
-- [ ] Alpha 2 ~50 joueurs.
-- [ ] Alpha 3 ~200 joueurs.
-- [ ] Bêta progressive 1 000+ testeurs.
-- [ ] Stress tests, matchmaking, économie, rétention, sécurité.
+- [ ] Alpha 1 : ~10 joueurs.
+- [ ] Alpha 2 : ~50 joueurs.
+- [ ] Alpha 3 : ~200 joueurs.
+- [ ] Bêta progressive : 1 000+ testeurs.
+- [ ] Stress tests serveurs.
+- [ ] Validation matchmaking, économie, rétention et sécurité.
 
 Ordre envisagé : **Web/PWA → Windows → iOS/Android → consoles si pertinent.**
 
@@ -250,4 +291,4 @@ Ordre envisagé : **Web/PWA → Windows → iOS/Android → consoles si pertinen
 
 # Priorité immédiate
 
-**Phase 1 — Architecture.** La Phase 2 est validée en avance ; aucune autre grosse fonctionnalité ne doit être empilée avant la refonte structurelle.
+**Phase 3 — Modes, IA et tutoriel.** Les Phases 0, 1 et 2 sont désormais validées ; les prochaines fonctionnalités peuvent être ajoutées sur la nouvelle architecture TypeScript sans revenir à l’ancien monolithe.
