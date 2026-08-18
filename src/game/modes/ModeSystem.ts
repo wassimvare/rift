@@ -8,7 +8,7 @@ export interface ModeTickResult {
   event:ChaosEvent|null;
 }
 
-const CHAOS_EVENTS:ChaosEvent[]=['CORE SURGE','FULL FLUX','POLARITY SHIFT','DASH RESET'];
+const CHAOS_EVENTS:readonly ChaosEvent[]=['CORE SURGE','FULL FLUX','POLARITY SHIFT','DASH RESET'];
 
 export function tournamentDifficulty(round:number):AiDifficulty{
   if(round<=1)return'challenger';
@@ -17,7 +17,8 @@ export function tournamentDifficulty(round:number):AiDifficulty{
 }
 
 export function chaosEventForIndex(index:number):ChaosEvent{
-  return CHAOS_EVENTS[Math.abs(Math.floor(index))%CHAOS_EVENTS.length];
+  const event=CHAOS_EVENTS[Math.abs(Math.floor(index))%CHAOS_EVENTS.length];
+  return event??'CORE SURGE';
 }
 
 export function resolveMode(modeId:ModeId,settings:PlayerSettings,tournamentRound=1):ModeConfig{
