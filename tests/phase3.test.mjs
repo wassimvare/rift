@@ -83,6 +83,14 @@ test('Guided duel completes after two player goals',()=>{
   const tutorial=new TutorialSystem();tutorial.start();tutorial.tickMovement(1.5,1);tutorial.action('dash');tutorial.action('push');tutorial.action('pull');tutorial.action('pulse');tutorial.action('burst');assert.equal(tutorial.goal(true).completed,false);assert.equal(tutorial.goal(true).completed,true);
 });
 
+test('Guided duel retry clears partial goal progress',()=>{
+  const tutorial=new TutorialSystem();tutorial.start();tutorial.tickMovement(1.5,1);tutorial.action('dash');tutorial.action('push');tutorial.action('pull');tutorial.action('pulse');tutorial.action('burst');tutorial.goal(true);tutorial.resetDuel();assert.equal(tutorial.goal(true).completed,false);
+});
+
 test('Phase 2 saves migrate to Phase 3 defaults without losing data',()=>{
   const old=defaultState();old.saveVersion=2;old.credits=9999;delete old.tutorial;delete old.settings.aiDifficulty;delete old.settings.aiProfile;const migrated=migrateState(old);assert.equal(migrated.saveVersion,SAVE_VERSION);assert.equal(migrated.credits,9999);assert.equal(migrated.settings.aiDifficulty,'challenger');assert.equal(migrated.tutorial.completed,false);
+});
+
+test('legacy Quick Duel selection migrates to RIFT Duel',()=>{
+  const migrated=migrateState({saveVersion:2,credits:4200,selectedMode:'quick'});assert.equal(migrated.selectedMode,'duel');
 });
