@@ -21,11 +21,12 @@ export class TutorialSystem{
 
   get active():boolean{return this.index>=0&&this.index<TUTORIAL_STEPS.length;}
   get stepIndex():number{return Math.max(0,this.index);}
-  get current():TutorialStep|null{return this.active?TUTORIAL_STEPS[this.index]:null;}
+  get current():TutorialStep|null{return this.active?(TUTORIAL_STEPS[this.index]??null):null;}
   get aiEnabled():boolean{return this.current?.id==='duel';}
 
   start():TutorialStep{
-    this.index=0;this.movement=0;this.duelGoals=0;return TUTORIAL_STEPS[0];
+    this.index=0;this.movement=0;this.duelGoals=0;
+    return TUTORIAL_STEPS[0]??{id:'movement',title:'01 · MOUVEMENT',prompt:'Déplace-toi pour commencer.'};
   }
 
   stop():void{this.index=-1;this.movement=0;this.duelGoals=0;}
@@ -53,6 +54,8 @@ export class TutorialSystem{
     if(this.duelGoals>=2){this.index=TUTORIAL_STEPS.length;return{advanced:true,completed:true,step:null};}
     return this.snapshot(false);
   }
+
+  resetDuel():void{this.duelGoals=0;}
 
   prepare(game:MatchState):void{
     const id=this.current?.id;
