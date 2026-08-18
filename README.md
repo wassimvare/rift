@@ -4,15 +4,23 @@ Prototype jouable d'un jeu d'arène 1v1 mêlant gameplay compétitif, collection
 
 ## Roadmap
 
-**Phase 0 — Stabilisation : VALIDÉE**
+**Phase 0 — Stabilisation : VALIDÉE ✅**
+
+**Phase 1 — Architecture propre et maintenable : PROCHAINE 🔵**
+
+La feuille de route complète est maintenant suivie dans [`ROADMAP.md`](ROADMAP.md).
 
 La Phase 0 couvre la sauvegarde complète, la fiabilité des buts, l'overtime, les états de match, pause/restart/abandon, résultats, revanche, historique et tests de non-régression.
 
-Voir [`PHASE0.md`](PHASE0.md) pour la checklist détaillée.
+Voir également [`PHASE0.md`](PHASE0.md) pour la checklist détaillée de validation.
 
 ## Jouer
 
-La build est conçue pour navigateur moderne. Sur mobile, lance un match puis tourne le téléphone en paysage.
+Build web :
+
+https://rift-playable-preview.vercel.app
+
+Sur mobile, lance un match puis tourne le téléphone en paysage.
 
 ### Commandes PC
 
@@ -44,7 +52,7 @@ La build est conçue pour navigateur moderne. Sur mobile, lance un match puis to
 npm test
 ```
 
-Les tests couvrent notamment la sauvegarde/migration, les buts gauche/droite, l'overtime, la mise à jour des statistiques et la limite d'historique.
+Les tests couvrent notamment la sauvegarde/migration, une installation neuve, les buts gauche/droite, l'overtime, la mise à jour des statistiques et la limite d'historique.
 
 ## Structure actuelle
 
@@ -52,5 +60,7 @@ Les tests couvrent notamment la sauvegarde/migration, les buts gauche/droite, l'
 - `game.js` — gameplay et états de match
 - `core.js` — logique critique testable (save, buts, résultats)
 - `tests/phase0.test.js` — tests automatiques
+- `PHASE0.md` — validation de la Phase 0
+- `ROADMAP.md` — feuille de route complète du projet
 
 RIFT reste un prototype local : le Market et l'inventaire ne sont pas encore côté serveur, et le multijoueur réel viendra dans les phases suivantes.
