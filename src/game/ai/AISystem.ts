@@ -24,7 +24,7 @@ interface Memory{wait:number;input:NormalizedInput;}
 
 export function aiDifficultyScore(value:AiDifficulty):number{return(['recruit','challenger','elite','riftborn'] as AiDifficulty[]).indexOf(value);}
 
-export function profileTarget(game:MatchState,player:PlayerEntity,team:TeamSide,profile:AiProfile,prediction=1):{x:number;y:number}{
+export function profileTarget(game:MatchState,_player:PlayerEntity,team:TeamSide,profile:AiProfile,prediction=1):{x:number;y:number}{
   const attack=team==='you'?1:-1;
   const ownGoal=team==='you'?70:ARENA.width-70;
   const predicted={x:game.ball.x+game.ball.vx*(8+16*prediction),y:game.ball.y+game.ball.vy*(5+11*prediction)};
