@@ -29,7 +29,10 @@ export class PhysicsSystem{
       for(const player of players)this.integratePlayer(player,sub);
       game.ball.x+=game.ball.vx*sub*60;game.ball.y+=game.ball.vy*sub*60;
       for(const player of players)this.abilities.collision(player,player===game.a?1.28:1.13);
-      for(let left=0;left<players.length;left+=1)for(let right=left+1;right<players.length;right+=1)this.playerPlayerCollision(players[left],players[right]);
+      for(let left=0;left<players.length;left+=1){
+        const a=players[left];if(!a)continue;
+        for(let right=left+1;right<players.length;right+=1){const b=players[right];if(b)this.playerPlayerCollision(a,b);}
+      }
       if(this.wallAndGoalStep(game))return;
     }
     this.guardCore(game,dt);
