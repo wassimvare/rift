@@ -12,9 +12,14 @@
     "src/types/**/*.ts",
     "src/data/**/*.ts",
     "src/state/**/*.ts",
+    "src/economy/**/*.ts",
+    "src/progression/**/*.ts",
+    "src/network/**/*.ts",
     "src/game/config.ts",
+    "src/game/ai/**/*.ts",
+    "src/game/entities/**/*.ts",
     "src/game/physics/**/*.ts",
     "src/game/rules/**/*.ts",
-    "src/game/abilities/AbilityMath.ts"
+    "src/game/abilities/**/*.ts"
   ]
 }
