@@ -22,7 +22,7 @@ Statut : **EN VALIDATION 🧪**
 - [x] Audio/haptique séparés (`Sfx`).
 - [x] Rendu Canvas séparé (`Renderer`).
 - [x] UI/DOM séparés (`UiController`, `dom.ts`).
-- [x] Ancienne architecture JS prévue pour suppression dans le commit Phase 1.
+- [x] Ancienne architecture JS supprimée dans le commit Phase 1.
 
 ## Compatibilité
 
@@ -52,3 +52,5 @@ La phase sera passée en **VALIDÉE ✅** uniquement après :
 3. Ancienne architecture JS supprimée du dépôt.
 4. Build de production déployée et jouable.
 5. Aucun échec des tests Phase 0/2.
+
+> Branche `phase1-ci-validation` utilisée uniquement pour exposer le workflow de validation pull request au connecteur.
