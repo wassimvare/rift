@@ -66,13 +66,15 @@
   }
 
   function loadState(storage) {
-    const legacyValue = Number(storage?.getItem?.(LEGACY_CREDITS_KEY));
+    const legacyRaw = storage?.getItem?.(LEGACY_CREDITS_KEY);
+    const legacyParsed = legacyRaw === null || legacyRaw === undefined || legacyRaw === '' ? undefined : Number(legacyRaw);
+    const legacyValue = Number.isFinite(legacyParsed) && legacyParsed >= 0 ? legacyParsed : undefined;
     try {
       const raw = storage?.getItem?.(SAVE_KEY);
-      if (!raw) return migrateState(null, Number.isFinite(legacyValue) ? legacyValue : undefined);
-      return migrateState(JSON.parse(raw), Number.isFinite(legacyValue) ? legacyValue : undefined);
+      if (!raw) return migrateState(null, legacyValue);
+      return migrateState(JSON.parse(raw), legacyValue);
     } catch (_) {
-      return migrateState(null, Number.isFinite(legacyValue) ? legacyValue : undefined);
+      return migrateState(null, legacyValue);
     }
   }
 
