@@ -19,3 +19,9 @@ jobs:
       - run: npm run check
       - run: npm run build
       - run: npm run smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rift-production-dist
+          path: dist
+          if-no-files-found: error
+          retention-days: 7
