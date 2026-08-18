@@ -19,6 +19,13 @@ test('default save contains every Phase 0 persistent field', () => {
   assert.ok(Array.isArray(s.matchHistory));
 });
 
+test('fresh install starts with 4200 credits when no legacy key exists', () => {
+  const storage = new MemoryStorage();
+  const s = Core.loadState(storage);
+  assert.equal(s.credits, 4200);
+  assert.equal(s.inventory.length, 3);
+});
+
 test('legacy credits migrate without losing starter inventory', () => {
   const storage = new MemoryStorage({ rxCredits: '7337' });
   const s = Core.loadState(storage);
