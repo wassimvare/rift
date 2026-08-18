@@ -2,43 +2,46 @@
 
 Prototype jouable d'un jeu d'arène 1v1 mêlant gameplay compétitif, collection d'objets et économie.
 
-## Roadmap
+## État du projet
 
-**Phase 0 — Stabilisation : VALIDÉE ✅**
+- **Phase 0 — Stabilisation : ✅ VALIDÉE**
+- **Phase 2 — Gameplay & sensations : ✅ VALIDÉE**
+- **Phase 1 — Architecture : 🔵 PROCHAINE**
 
-**Phase 1 — Architecture propre et maintenable : PROCHAINE 🔵**
+La Phase 2 a été réalisée en avance : mouvement retravaillé, collisions renforcées, Perfect Dash, PUSH/PULL avec falloff, Pulse lisible, Rift Burst amélioré, support manette et réglages tactiles/clavier.
 
-La feuille de route complète est maintenant suivie dans [`ROADMAP.md`](ROADMAP.md).
-
-La Phase 0 couvre la sauvegarde complète, la fiabilité des buts, l'overtime, les états de match, pause/restart/abandon, résultats, revanche, historique et tests de non-régression.
-
-Voir également [`PHASE0.md`](PHASE0.md) pour la checklist détaillée de validation.
+Voir [`ROADMAP.md`](ROADMAP.md), [`PHASE0.md`](PHASE0.md) et [`PHASE2.md`](PHASE2.md).
 
 ## Jouer
 
-Build web :
-
-https://rift-playable-preview.vercel.app
+Build web : https://rift-playable-preview.vercel.app
 
 Sur mobile, lance un match puis tourne le téléphone en paysage.
 
-### Commandes PC
+### Commandes PC par défaut
 
 - WASD / flèches : déplacement
 - E : Pulse
 - Q : PUSH / PULL
 - F : Rift Burst
 - Espace : Dash
-- P / Échap : pause / reprise
+- P / Échap : pause
 
-### Commandes mobile
+Toutes les touches principales peuvent maintenant être remappées dans **Réglages**.
 
-- Joystick gauche : déplacement
-- PULSE
-- DASH
-- PUSH/PULL
-- RIFT BURST
-- Boutons PAUSE / RESTART / QUITTER dans l'arène
+### Manette
+
+- Stick gauche : déplacement
+- A : Dash
+- X : Pulse
+- B : PUSH / PULL
+- Y : Rift Burst
+- Start : Pause
+
+### Mobile
+
+- Joystick gauche + 4 actions tactiles
+- Sensibilité, taille, position et layout droitier/gaucher configurables
 
 ## Modes
 
@@ -46,21 +49,22 @@ Sur mobile, lance un match puis tourne le téléphone en paysage.
 - Quick Duel — 2:30, premier à 4 buts
 - RIFT Blitz — 1:30, premier à 3 buts
 
-## Tests
+## Validation
 
 ```bash
 npm test
+npm run check
 ```
 
-Les tests couvrent notamment la sauvegarde/migration, une installation neuve, les buts gauche/droite, l'overtime, la mise à jour des statistiques et la limite d'historique.
+État actuel : **21/21 tests Node réussis**, incluant les 9 tests de stabilisation Phase 0 et 12 tests gameplay Phase 2.
 
 ## Structure actuelle
 
-- `index.html` — interface et arène
-- `game.js` — gameplay et états de match
-- `core.js` — logique critique testable (save, buts, résultats)
-- `tests/phase0.test.js` — tests automatiques
-- `PHASE0.md` — validation de la Phase 0
-- `ROADMAP.md` — feuille de route complète du projet
+- `index.html` — interface, arène et réglages
+- `game/phase2-a.js` → `phase2-d.js` — gameplay et rendu Phase 2, chargés dans l’ordre
+- `game.js` — note de compatibilité vers le nouveau découpage
+- `core.js` — logique pure testable, sauvegarde et paramètres gameplay
+- `tests/phase0.test.js` — non-régression Phase 0
+- `tests/phase2.test.js` — gameplay Phase 2
 
-RIFT reste un prototype local : le Market et l'inventaire ne sont pas encore côté serveur, et le multijoueur réel viendra dans les phases suivantes.
+La refonte d'architecture TypeScript/Vite reste la prochaine priorité avant backend et multijoueur.

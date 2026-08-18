@@ -8,7 +8,7 @@ Dernière mise à jour : 18 août 2026
 |---|---|---|
 | 0 | Stabilisation du prototype | ✅ VALIDÉE |
 | 1 | Architecture propre et maintenable | 🔵 PROCHAINE |
-| 2 | Gameplay et sensations de jeu | ⏳ À FAIRE |
+| 2 | Gameplay et sensations de jeu | ✅ VALIDÉE |
 | 3 | Modes, IA et tutoriel | ⏳ À FAIRE |
 | 4 | Vault, loadout, objets et pedigree | ⏳ À FAIRE |
 | 5 | Progression, Ranked et saisons | ⏳ À FAIRE |
@@ -20,32 +20,15 @@ Dernière mise à jour : 18 août 2026
 | 11 | Audio, graphismes, performances et analytics | ⏳ À FAIRE |
 | 12 | Alpha, bêta et lancement | ⏳ À FAIRE |
 
+> La Phase 2 a été réalisée en avance. La **priorité immédiate reste la Phase 1** afin de rendre le code maintenable avant d'ajouter le backend et le multijoueur.
+
 ---
 
 # Phase 0 — Stabilisation
 
-**Statut : ✅ VALIDÉE**
+**Statut : ✅ VALIDÉE** — voir [`PHASE0.md`](PHASE0.md).
 
-La Phase 0 est fermée. Voir [`PHASE0.md`](PHASE0.md) pour la checklist et les résultats de validation.
-
-Validé :
-
-- sauvegarde versionnée et migration ;
-- sauvegarde complète de l'état du joueur ;
-- installation neuve correcte ;
-- Market persistant ;
-- buts fiabilisés ;
-- kickoff après but ;
-- overtime en mort subite ;
-- pause/reprise ;
-- restart confirmé ;
-- abandon confirmé ;
-- écran de résultat et revanche ;
-- historique ;
-- récupération du Core en état invalide ;
-- tests automatiques et CI.
-
-**Critère de sortie : atteint.**
+Validé : sauvegarde versionnée, migration, installation neuve, Market persistant, buts, kickoff, overtime, pause/restart/abandon, écran de résultat, revanche, historique, récupération du Core et tests automatiques.
 
 ---
 
@@ -53,107 +36,87 @@ Validé :
 
 **Statut : 🔵 PROCHAINE**
 
-Objectif : pouvoir développer RIFT rapidement sans recréer des bugs à chaque modification.
+Objectif : pouvoir développer RIFT rapidement sans recréer de régressions.
 
-## À faire
-
-- [ ] Passer à une structure de projet moderne avec Vite.
+- [ ] Passer à Vite.
 - [ ] Passer le code critique en TypeScript.
-- [ ] Séparer le moteur de jeu, l'UI, l'économie, la progression et le réseau.
-- [ ] Créer des modules dédiés : `GameEngine`, `Physics`, `Player`, `RiftCore`, `Goals`, `Abilities`, `AI`.
-- [ ] Créer un vrai gestionnaire d'état global.
-- [ ] Séparer les données d'items du code gameplay.
-- [ ] Ajouter ESLint / formatage automatique.
-- [ ] Ajouter des tests unitaires par module.
-- [ ] Ajouter des tests de smoke build.
-- [ ] Garder la sauvegarde Phase 0 compatible après migration.
-- [ ] Conserver la jouabilité desktop + mobile.
-- [ ] Déploiement automatique de la build après validation CI.
+- [ ] Séparer moteur de jeu, UI, économie, progression et réseau.
+- [ ] Modules dédiés : `GameEngine`, `Physics`, `Player`, `RiftCore`, `Goals`, `Abilities`, `AI`.
+- [ ] Gestionnaire d'état global.
+- [ ] Données d'items séparées du gameplay.
+- [ ] ESLint / formatage.
+- [ ] Tests unitaires par module et smoke build.
+- [ ] Compatibilité sauvegarde Phase 0/2.
+- [ ] Jouabilité desktop + mobile conservée.
+- [ ] Déploiement automatique après CI.
 
-## Critères pour passer Phase 1 en VALIDÉE
-
-- aucun gros fichier monolithique contenant toute la logique ;
-- build reproductible avec une commande ;
-- tests Phase 0 toujours verts ;
-- aucune régression sur sauvegarde, score, overtime et mobile ;
-- architecture documentée ;
-- production déployable automatiquement.
+**Critère de sortie :** plus de gros fichier monolithique, build reproductible, tests 0/2 verts, architecture documentée et production déployable automatiquement.
 
 ---
 
 # Phase 2 — Gameplay et sensations
 
-Objectif : rendre le match suffisamment bon pour être rejoué même sans récompense ni Market.
+**Statut : ✅ VALIDÉE** — voir [`PHASE2.md`](PHASE2.md).
 
-## Mouvement et physique
+## Mouvement / physique
 
-- [ ] Accélération/décélération plus précise.
-- [ ] Inertie et friction équilibrées.
-- [ ] Collisions joueur/Core plus satisfaisantes.
-- [ ] Rebond du Core cohérent sur toutes les parois.
-- [ ] Gestion fiable des collisions à grande vitesse.
-- [ ] Réglage du rythme de match.
+- [x] Accélération et décélération précises.
+- [x] Inertie/friction centralisées et testées.
+- [x] Collisions joueur/Core renforcées.
+- [x] Rebond cohérent sur les parois.
+- [x] Sous-étapes physiques pour les grandes vitesses.
+- [x] Rythme du Core ajusté par mode.
 
 ## Dash
 
-- [ ] Dash plus lisible et plus puissant.
-- [ ] Trail et impact visuel.
-- [ ] Feedback sonore/haptique.
-- [ ] Fenêtre de Perfect Dash à tester.
+- [x] Dash plus lisible et puissant.
+- [x] Trail, onde et particules.
+- [x] Feedback sonore/haptique.
+- [x] Perfect Dash fonctionnel, limité à une activation par Dash.
 
 ## PUSH / PULL
 
-- [ ] Identité visuelle cyan/violet claire.
-- [ ] Portée visible.
-- [ ] Force et falloff équilibrés.
-- [ ] Cooldown/ressource lisible.
-- [ ] Combos possibles avec Dash et Pulse.
+- [x] Identité cyan / rose-violet.
+- [x] Portée visible.
+- [x] Falloff selon distance.
+- [x] Cooldown Pulse visible.
+- [x] Combo Dash + Pulse.
 
 ## Pulse / Rift Burst
 
-- [ ] Pulse plus lisible.
-- [ ] Burst spectaculaire à 100 % Flux.
-- [ ] Effets de caméra et particules.
-- [ ] Équilibrage anti-spam.
+- [x] Pulse plus lisible et anti-spam.
+- [x] Burst à 100 % Flux avec impulsion, hit-stop, flash, shake et particules.
+- [x] Force du Burst dépendante de la distance.
 
 ## Contrôles
 
-- [ ] Remapping clavier.
-- [ ] Support manette.
-- [ ] Sensibilité joystick mobile.
-- [ ] Position/taille des boutons tactiles personnalisables.
+- [x] Remapping clavier sauvegardé.
+- [x] Support manette Gamepad API.
+- [x] Deadzone manette.
+- [x] Sensibilité joystick mobile.
+- [x] Taille et position tactile réglables.
+- [x] Layout droitier/gaucher.
+- [x] Audio, haptique et camera shake configurables.
 
-## Critère de sortie
-
-Le gameplay doit rester amusant pendant plusieurs matchs successifs sans dépendre du système de récompenses.
+**Validation : 21/21 tests Node + smoke tests desktop/mobile sans erreur JavaScript.**
 
 ---
 
 # Phase 3 — Modes, IA et tutoriel
 
 ## Tutoriel
-
-- [ ] Mouvement.
-- [ ] Dash.
-- [ ] PUSH.
-- [ ] PULL.
-- [ ] Pulse.
-- [ ] Rift Burst.
+- [ ] Mouvement, Dash, PUSH, PULL, Pulse, Rift Burst.
 - [ ] Premier duel guidé.
 
 ## IA
-
-- [ ] Recruit.
-- [ ] Challenger.
-- [ ] Elite.
-- [ ] Riftborn.
-- [ ] Profils agressif, défensif, technique et contre-attaque.
+- [ ] Difficultés Recruit / Challenger / Elite / Riftborn.
+- [ ] Profils agressif, défensif, technique, contre-attaque.
+- [ ] Utilisation intelligente de PULL et du Burst.
 
 ## Modes
-
 - [ ] RIFT Duel 1v1.
 - [ ] Doubles 2v2.
-- [ ] Blitz avec vraie règle propre.
+- [ ] Blitz avec règle propre.
 - [ ] Overcharge.
 - [ ] Flux Control.
 - [ ] Chaos Rift.
@@ -164,232 +127,127 @@ Le gameplay doit rester amusant pendant plusieurs matchs successifs sans dépend
 
 # Phase 4 — Vault, Loadout, objets et pedigree
 
-- [ ] Chaque objet devient une instance unique.
-- [ ] UUID permanent.
-- [ ] Numéro de série.
-- [ ] Date de création.
-- [ ] Propriétaire initial et actuel.
-- [ ] Nombre de propriétaires.
-- [ ] Historique des trades/ventes.
-- [ ] Matchs, victoires et buts associés à l'objet.
-- [ ] Loadout complet : Frame, Trail, Core Skin, Goal FX, Banner, Title.
-- [ ] Tous les cosmétiques équipés doivent apparaître réellement en match ou dans le profil.
-- [ ] Collections thématiques et saisonnières.
+- [ ] Instance unique par objet avec UUID permanent.
+- [ ] Numéro de série, date de création, propriétaire initial/actuel.
+- [ ] Nombre de propriétaires et historique trades/ventes.
+- [ ] Matchs/victoires/buts associés à l'objet.
+- [ ] Loadout : Frame, Trail, Core Skin, Goal FX, Banner, Title.
+- [ ] Tous les cosmétiques équipés réellement visibles.
+- [ ] Collections saisonnières.
 - [ ] 100+ objets avant bêta publique.
 
 ---
 
 # Phase 5 — Progression, Ranked et saisons
 
-- [ ] XP et niveaux.
-- [ ] Récompenses de niveau.
-- [ ] Missions quotidiennes.
-- [ ] Missions hebdomadaires.
-- [ ] Achievements.
-- [ ] Titles et badges.
-- [ ] Statistiques détaillées.
-- [ ] Séparation complète Ranked / Casual.
-- [ ] MMR caché.
+- [ ] XP, niveaux et récompenses.
+- [ ] Missions quotidiennes/hebdomadaires.
+- [ ] Achievements, titles, badges, statistiques.
+- [ ] Ranked séparé du Casual.
+- [ ] MMR caché et placements.
 - [ ] Bronze → Silver → Gold → Platinum → Diamond → Master → Riftborn.
-- [ ] Placement matches.
-- [ ] Saisons de 8 à 12 semaines.
-- [ ] Reset partiel du Ranked.
-- [ ] Récompenses saisonnières exclusives.
+- [ ] Saisons de 8 à 12 semaines et reset partiel.
+- [ ] Récompenses saisonnières.
 
 ---
 
 # Phase 6 — Comptes et backend serveur
 
-- [ ] Inscription et connexion.
-- [ ] Pseudo unique.
-- [ ] Profil public.
-- [ ] Récupération de compte.
+- [ ] Inscription/connexion, pseudo unique, profil, récupération.
 - [ ] Synchronisation multi-appareils.
-- [ ] Base de données utilisateurs.
-- [ ] Wallet serveur.
-- [ ] Inventaire serveur.
-- [ ] Item catalog / item instances.
-- [ ] Match history serveur.
-- [ ] Ranked ratings serveur.
-- [ ] Missions serveur.
-- [ ] Migrations de base de données.
-- [ ] Sauvegardes et restauration.
+- [ ] Base utilisateurs, wallet, inventaire, item instances.
+- [ ] Historique matchs et MMR serveur.
+- [ ] Missions serveur, migrations, sauvegardes/restauration.
 
-**À partir de cette phase, le client ne doit plus être la source de vérité pour les crédits, objets ou résultats compétitifs.**
+À partir d'ici, **le client ne doit plus être la source de vérité** pour crédits, objets ou résultats compétitifs.
 
 ---
 
 # Phase 7 — Multijoueur réel
 
-- [ ] Matchmaking 1v1.
-- [ ] Serveur autoritaire.
-- [ ] Synchronisation du Core et des joueurs.
-- [ ] Client prediction.
-- [ ] Server reconciliation.
-- [ ] Interpolation.
-- [ ] Gestion de la latence.
-- [ ] Reconnexion.
-- [ ] Abandons et pénalités.
-- [ ] Région serveur automatique.
-- [ ] Rematch.
-- [ ] Partie privée par code.
+- [ ] Matchmaking 1v1 et serveur autoritaire.
+- [ ] Synchronisation joueurs/Core.
+- [ ] Client prediction, reconciliation et interpolation.
+- [ ] Gestion latence/reconnexion.
+- [ ] Abandons/pénalités et régions serveur.
+- [ ] Rematch et partie privée par code.
 
 ---
 
 # Phase 8 — Market et Trade joueur-à-joueur
 
 ## Market
-
-- [ ] Listings réels.
-- [ ] Achat/vente atomique côté serveur.
-- [ ] Historique de prix.
-- [ ] Prix moyen.
-- [ ] Dernière vente.
-- [ ] Volume.
-- [ ] Watchlist/favoris.
-- [ ] Recherche et filtres avancés.
-- [ ] Frais de Market pour contrôler l'inflation.
+- [ ] Listings réels et transactions atomiques serveur.
+- [ ] Historique prix, moyenne, dernière vente, volume.
+- [ ] Watchlist, recherche/filtres et frais de Market.
 
 ## Trade
-
-- [ ] Session de trade serveur.
-- [ ] Objets + NC dans l'offre.
-- [ ] Lock de l'offre.
-- [ ] Double confirmation.
-- [ ] Timer anti-swap.
-- [ ] Historique de transaction.
-- [ ] Avertissement en cas d'écart de valeur important sans bloquer le trade.
+- [ ] Session serveur, objets + NC, lock, double confirmation, timer anti-swap.
+- [ ] Historique transaction et avertissement d'écart de valeur.
 
 ## Rareté
-
-- [ ] Stocks limités réellement garantis.
-- [ ] Numéros de série uniques à vie.
-- [ ] Aucune duplication possible.
+- [ ] Stocks limités garantis.
+- [ ] Séries uniques à vie, aucune duplication.
 
 ---
 
 # Phase 9 — Social et compétitif
 
-- [ ] Liste d'amis.
-- [ ] Invitations.
-- [ ] Party.
-- [ ] Statut en ligne.
-- [ ] Profil joueur.
-- [ ] Leaderboard mondial.
-- [ ] Leaderboard pays.
-- [ ] Leaderboard amis.
+- [ ] Amis, invitations, party, présence.
+- [ ] Profils et leaderboards monde/pays/amis.
 - [ ] Tournois.
-- [ ] Spectateur à terme.
-- [ ] Replays à terme.
+- [ ] Spectateur et replays à terme.
 
 ---
 
 # Phase 10 — Sécurité, anti-cheat et modération
 
-- [ ] Validation serveur de tous les résultats.
-- [ ] Protection contre speed hack / téléportation / modification du Core.
-- [ ] Protection crédits et inventaire.
-- [ ] Détection d'AFK farming.
-- [ ] Rate limiting.
+- [ ] Validation serveur des résultats.
+- [ ] Anti speed-hack/téléportation/Core hack.
+- [ ] Protection wallet/inventaire.
+- [ ] Détection AFK farming et rate limiting.
 - [ ] Logs d'audit économie.
-- [ ] Report joueur.
-- [ ] Blocage / mute.
-- [ ] Filtrage des pseudos.
-- [ ] Sanctions et bans.
+- [ ] Report, blocage, mute, filtrage pseudos, sanctions/bans.
 
 ---
 
 # Phase 11 — Polish, performances et analytics
 
-## Audio
-
-- [ ] Musique menu.
-- [ ] Ambiance arène.
-- [ ] Sons Dash/Pulse/PUSH/PULL/Burst.
-- [ ] But/victoire/défaite.
-- [ ] Son de drop par rareté.
-
-## Visuel
-
-- [ ] Shaders et failles.
-- [ ] Particules.
-- [ ] Goal explosions.
-- [ ] Camera shake réglable.
-- [ ] Intro de match.
-- [ ] MVP/victoire.
-- [ ] Plusieurs arènes.
+## Audio / visuel
+- [ ] Musique menu et ambiance arène.
+- [ ] Bibliothèque SFX finale.
+- [ ] Shaders/failles, Goal FX, intro, MVP/victoire, plusieurs arènes.
 
 ## Performances
-
-- [ ] 60 FPS cible stable.
-- [ ] 120 FPS optionnel sur appareils compatibles.
-- [ ] Profils Low / Medium / High.
-- [ ] Optimisation chauffe/batterie mobile.
-- [ ] Safe areas iPhone/Android.
+- [ ] 60 FPS stable, 120 FPS optionnel.
+- [ ] Profils Low/Medium/High.
+- [ ] Optimisation chauffe/batterie et safe areas mobiles.
 
 ## Analytics
-
-- [ ] Sessions.
-- [ ] Matchs/session.
-- [ ] Taux de fin de tutoriel.
-- [ ] Rétention J1/J7/J30.
-- [ ] Modes joués.
-- [ ] Économie et trades.
-- [ ] Crash/error monitoring.
+- [ ] Sessions, matchs/session, tutoriel, rétention J1/J7/J30.
+- [ ] Modes, économie/trades et crash monitoring.
 
 ---
 
 # Phase 12 — Alpha, bêta et lancement
 
-## Alpha privée
+- [ ] Alpha 1 ~10 joueurs.
+- [ ] Alpha 2 ~50 joueurs.
+- [ ] Alpha 3 ~200 joueurs.
+- [ ] Bêta progressive 1 000+ testeurs.
+- [ ] Stress tests, matchmaking, économie, rétention, sécurité.
 
-- [ ] Alpha 1 : ~10 joueurs.
-- [ ] Alpha 2 : ~50 joueurs.
-- [ ] Alpha 3 : ~200 joueurs.
-- [ ] Correction des bugs bloquants avant chaque montée en charge.
-
-## Bêta
-
-- [ ] 1 000+ testeurs progressivement.
-- [ ] Stress test serveurs.
-- [ ] Validation matchmaking.
-- [ ] Validation économie.
-- [ ] Validation rétention.
-- [ ] Audit sécurité.
-
-## Lancement
-
-Ordre envisagé :
-
-1. Web/PWA.
-2. Windows.
-3. iOS / Android.
-4. Consoles seulement si le jeu justifie l'investissement.
+Ordre envisagé : **Web/PWA → Windows → iOS/Android → consoles si pertinent.**
 
 ---
 
-# Jalons principaux
+# Jalons
 
-### Alpha 0.1
-
-Gameplay solide + IA + compte + progression + Vault + sauvegarde serveur.
-
-### Alpha 0.2
-
-Multijoueur 1v1 + matchmaking + amis + Ranked réel.
-
-### Alpha 0.3
-
-Market + Trade + objets uniques + numéros de série + pedigree.
-
-### Beta 1.0
-
-Contenu, saisons, tournois, économie équilibrée, sécurité et polish suffisants pour une audience plus large.
-
----
+- **Alpha 0.1 :** gameplay solide + IA + compte + progression + Vault + sauvegarde serveur.
+- **Alpha 0.2 :** multijoueur 1v1 + matchmaking + amis + vrai Ranked.
+- **Alpha 0.3 :** Market + Trade + objets uniques + séries + pedigree.
+- **Beta 1.0 :** contenu, saisons, tournois, économie, sécurité et polish.
 
 # Priorité immédiate
 
-**Phase 1 — Architecture.**
-
-Aucune nouvelle grosse fonctionnalité ne doit être ajoutée avant que la base de code soit suffisamment propre pour supporter le multijoueur, le backend et l'économie sans multiplier les régressions.
+**Phase 1 — Architecture.** La Phase 2 est validée en avance ; aucune autre grosse fonctionnalité ne doit être empilée avant la refonte structurelle.

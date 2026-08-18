@@ -1,8 +1,9 @@
 {
   "name": "rift-exchange",
-  "version": "0.0.1-phase0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test tests/*.test.js",
+    "check": "node --check core.js && node --check game.js && node --check game/phase2-a.js && node --check game/phase2-b.js && node --check game/phase2-c.js && node --check game/phase2-d.js"
   }
 }

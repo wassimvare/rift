@@ -1,4 +1,4 @@
-name: Phase 0 validation
+name: RIFT validation
 on:
   push:
     branches: [main]
@@ -13,3 +13,4 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - run: npm run check
