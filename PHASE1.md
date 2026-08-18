@@ -1,56 +1,73 @@
 # Phase 1 — Architecture propre et maintenable
 
-Statut : **EN VALIDATION 🧪**
+Statut : **VALIDÉE ✅**
 
 ## Architecture
 
-- [x] Vite devient le système officiel de développement et de build.
-- [x] TypeScript strict activé sur le code applicatif.
-- [x] `index.html` ne charge plus les anciens scripts globaux.
+- [x] Vite est le système officiel de développement et de build.
+- [x] TypeScript `strict` activé sur le code applicatif.
 - [x] Point d’entrée unique : `src/main.ts`.
-- [x] Données catalogue séparées dans `src/data/catalog.ts`.
-- [x] Données modes séparées dans `src/data/modes.ts`.
-- [x] État persistant séparé dans `src/state/`.
-- [x] Store global observable (`Store`).
-- [x] Types partagés séparés dans `src/types/`.
-- [x] Moteur de match séparé (`GameEngine`).
-- [x] Physique séparée (`PhysicsSystem`, fonctions vectorielles testables).
-- [x] Capacités séparées (`AbilitySystem`, math de Pulse/Burst/Perfect Dash).
-- [x] Entités séparées (`factories.ts`).
-- [x] Règles de but/overtime séparées (`rules/goals.ts`).
-- [x] Entrées clavier/mobile/manette séparées (`InputManager`).
-- [x] Audio/haptique séparés (`Sfx`).
-- [x] Rendu Canvas séparé (`Renderer`).
-- [x] UI/DOM séparés (`UiController`, `dom.ts`).
-- [x] Ancienne architecture JS supprimée dans le commit Phase 1.
+- [x] Données catalogue séparées dans `src/data/`.
+- [x] État persistant et Store global séparés dans `src/state/`.
+- [x] Types partagés dans `src/types/`.
+- [x] Moteur de match séparé : `GameEngine`.
+- [x] Physique séparée : `PhysicsSystem` + fonctions mathématiques testables.
+- [x] Capacités séparées : `AbilitySystem` + `AbilityMath`.
+- [x] IA séparée : `AISystem`.
+- [x] Entités séparées : `game/entities/`.
+- [x] Règles de buts/overtime séparées : `game/rules/`.
+- [x] Entrées clavier/mobile/manette séparées : `InputManager`.
+- [x] Audio/haptique séparés : `Sfx`.
+- [x] Rendu Canvas séparé : `Renderer`.
+- [x] UI/DOM séparés : `UiController` + `dom.ts`.
+- [x] Économie séparée : `MarketService`.
+- [x] Progression séparée : `ProgressionService`.
+- [x] Frontière réseau créée : `NetworkGateway`, actuellement implémentée par `LocalNetworkGateway`.
+- [x] Ancienne architecture `core.js`, `game.js` et `game/phase2-*.js` supprimée.
 
 ## Compatibilité
 
 - [x] La clé de sauvegarde reste `rift.phase0.save`.
-- [x] `SAVE_VERSION = 2` conservé pour ne pas casser les sauvegardes Phase 2.
+- [x] `SAVE_VERSION = 2` conservé pour les sauvegardes Phase 2.
 - [x] Migration des anciens Nova Credits conservée.
-- [x] Inventaire, statistiques, réglages et historique conservés au rechargement.
+- [x] Inventaire, statistiques, réglages et historique persistent après migration.
 - [x] Gameplay Phase 2 conservé : Dash, Perfect Dash, PUSH/PULL, Pulse, Burst, mobile et manette.
 
-## Qualité
+## Qualité et CI
 
-- [x] TypeScript `strict` compile sans erreur localement.
-- [x] ESLint configuré.
-- [x] Prettier configuré + commande de formatage.
-- [x] 24 tests Node passent localement.
-- [x] Tests Phase 0 et Phase 2 conservés.
-- [x] 4 tests dédiés à l’architecture Phase 1 ajoutés.
-- [x] Workflow GitHub Actions : install → tests → lint/types → build Vite → smoke build.
-- [x] Smoke test du bundle de production ajouté.
+- [x] TypeScript strict sans erreur.
+- [x] ESLint sans erreur.
+- [x] Prettier configuré.
+- [x] Tests Phase 0 conservés.
+- [x] Tests Phase 2 conservés.
+- [x] Tests Phase 1 dédiés aux frontières d’architecture.
+- [x] **28/28 tests Node réussis dans GitHub Actions**.
+- [x] `npm run check` réussi dans GitHub Actions.
+- [x] `npm run build` Vite réussi dans GitHub Actions.
+- [x] `npm run smoke` réussi sur le bundle `dist/`.
+- [x] Artefact `rift-production-dist` généré automatiquement après validation.
+- [x] Déploiement production du bundle validé effectué sur Vercel.
 
-## Critères de validation finale
+## Pipeline officiel
 
-La phase sera passée en **VALIDÉE ✅** uniquement après :
+```text
+Git push / Pull Request
+        ↓
+npm install
+        ↓
+28 tests Phase 0 + 1 + 2
+        ↓
+TypeScript strict + ESLint
+        ↓
+Vite production build
+        ↓
+Smoke test dist/
+        ↓
+Artefact rift-production-dist
+```
 
-1. CI GitHub verte sur le commit Phase 1.
-2. Build Vite de production créée avec succès.
-3. Ancienne architecture JS supprimée du dépôt.
-4. Build de production déployée et jouable.
-5. Aucun échec des tests Phase 0/2.
+## Résultat
 
-> Branche `phase1-ci-validation` utilisée uniquement pour exposer le workflow de validation pull request au connecteur.
+La Phase 1 est fermée. RIFT ne repose plus sur un fichier JavaScript monolithique : chaque responsabilité possède désormais une frontière claire et testable. La future couche multijoueur pourra remplacer `LocalNetworkGateway` sans réécrire la physique, l’UI, l’économie locale ou le moteur de match.
+
+**Critère de sortie : atteint. ✅**
