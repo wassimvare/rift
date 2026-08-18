@@ -1,5 +1,46 @@
 import type { PlayerSettings,PlayerState } from '../types/state.js';
-export const SAVE_VERSION=2;export const SAVE_KEY='rift.phase0.save';export const LEGACY_CREDITS_KEY='rxCredits';export const MAX_HISTORY=50;export const STARTER_IDS=['ion','ghost','volt'] as const;
+
+export const SAVE_VERSION=3;
+export const SAVE_KEY='rift.phase0.save';
+export const LEGACY_CREDITS_KEY='rxCredits';
+export const MAX_HISTORY=50;
+export const STARTER_IDS=['ion','ghost','volt'] as const;
 export const DEFAULT_KEYMAP=Object.freeze({up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',dash:'Space',pulse:'KeyE',polarity:'KeyQ',burst:'KeyF',pause:'KeyP'});
-export function defaultSettings():PlayerSettings{return{audio:true,haptics:true,cameraShake:true,joystickSensitivity:1,touchScale:1,touchInset:12,touchLayout:'right',controller:true,keymap:{...DEFAULT_KEYMAP}}}
-export function defaultState():PlayerState{return{saveVersion:SAVE_VERSION,credits:4200,shards:12,selectedMode:'ranked',inventory:STARTER_IDS.map((id,index)=>({uid:`starter_${index+1}`,id,acquiredAt:0})),equippedItems:{Frame:null,Trail:null,'Core Skin':null,'Goal FX':null,Banner:null},xp:0,level:1,stats:{matches:0,wins:0,losses:0,goalsFor:0,goalsAgainst:0,streak:0,bestStreak:0,abandoned:0},settings:defaultSettings(),missions:[],matchHistory:[]}}
+
+export function defaultSettings():PlayerSettings{
+  return{
+    audio:true,
+    haptics:true,
+    cameraShake:true,
+    joystickSensitivity:1,
+    touchScale:1,
+    touchInset:12,
+    touchLayout:'right',
+    controller:true,
+    keymap:{...DEFAULT_KEYMAP},
+    aiDifficulty:'challenger',
+    aiProfile:'technical',
+    customTime:180,
+    customGoal:5,
+    customCoreSpeed:1,
+    customTeamSize:1,
+  };
+}
+
+export function defaultState():PlayerState{
+  return{
+    saveVersion:SAVE_VERSION,
+    credits:4200,
+    shards:12,
+    selectedMode:'ranked',
+    inventory:STARTER_IDS.map((id,index)=>({uid:`starter_${index+1}`,id,acquiredAt:0})),
+    equippedItems:{Frame:null,Trail:null,'Core Skin':null,'Goal FX':null,Banner:null},
+    xp:0,
+    level:1,
+    stats:{matches:0,wins:0,losses:0,goalsFor:0,goalsAgainst:0,streak:0,bestStreak:0,abandoned:0},
+    settings:defaultSettings(),
+    tutorial:{completed:false,bestStep:0,completedAt:null},
+    missions:[],
+    matchHistory:[],
+  };
+}

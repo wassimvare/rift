@@ -9,34 +9,39 @@ import { MarketService } from './economy/MarketService.js';
 import { ProgressionService } from './progression/ProgressionService.js';
 import { LocalNetworkGateway } from './network/NetworkGateway.js';
 import { AISystem } from './game/ai/AISystem.js';
+import { ModeSystem } from './game/modes/ModeSystem.js';
+import { TutorialSystem } from './tutorial/TutorialSystem.js';
 import { qs } from './ui/dom.js';
 
-const store = new Store(localStorage);
-const input = new InputManager(() => store.get().settings);
-const sfx = new Sfx(() => store.get().settings);
-const market = new MarketService(store);
-const progression = new ProgressionService(store);
-const network = new LocalNetworkGateway();
-const ai = new AISystem();
+const store=new Store(localStorage);
+const input=new InputManager(()=>store.get().settings);
+const sfx=new Sfx(()=>store.get().settings);
+const market=new MarketService(store);
+const progression=new ProgressionService(store);
+const network=new LocalNetworkGateway();
+const ai=new AISystem();
+const modes=new ModeSystem();
+const tutorial=new TutorialSystem();
 
-const actions: UiActions = {
-  play: () => engine.startMatch(),
-  pause: () => engine.pause(),
-  restart: () => engine.restart(),
-  quit: () => engine.quit(),
-  dash: () => engine.dash(),
-  pulse: () => engine.pulse(),
-  polarity: () => engine.polarity(),
-  burst: () => engine.burst(),
-  buy: (id) => engine.buy(id),
-  selectMode: (mode) => engine.selectMode(mode),
-  setting: (key, value) => engine.setting(key, value),
-  captureBinding: (action) => engine.captureBinding(action),
-  navigate: (view) => engine.navigate(view),
+const actions:UiActions={
+  play:()=>engine.startMatch(),
+  startTutorial:()=>engine.startTutorial(),
+  pause:()=>engine.pause(),
+  restart:()=>engine.restart(),
+  quit:()=>engine.quit(),
+  dash:()=>engine.dash(),
+  pulse:()=>engine.pulse(),
+  polarity:()=>engine.polarity(),
+  burst:()=>engine.burst(),
+  buy:(id)=>engine.buy(id),
+  selectMode:(mode)=>engine.selectMode(mode),
+  setting:(key,value)=>engine.setting(key,value),
+  captureBinding:(action)=>engine.captureBinding(action),
+  navigate:(view)=>engine.navigate(view),
 };
 
-const ui = new UiController(actions);
-const renderer = new Renderer(qs<HTMLCanvasElement>('#cv'), () => store.get().settings);
-const engine = new GameEngine(store, input, ui, renderer, sfx, market, progression, network, ai);
+const ui=new UiController(actions);
+const renderer=new Renderer(qs<HTMLCanvasElement>('#cv'),()=>store.get().settings);
+const engine=new GameEngine(store,input,ui,renderer,sfx,market,progression,network,ai,modes,tutorial);
 
-Object.assign(window, { rift: { engine, store } });
+Object.assign(window,{rift:{engine,store}});
