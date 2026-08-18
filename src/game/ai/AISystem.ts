@@ -29,7 +29,7 @@ export function profileTarget(game:MatchState,player:PlayerEntity,team:TeamSide,
   const ownGoal=team==='you'?70:ARENA.width-70;
   const predicted={x:game.ball.x+game.ball.vx*(8+16*prediction),y:game.ball.y+game.ball.vy*(5+11*prediction)};
   const ballThreat=team==='you'?game.ball.x<ARENA.width*.48:game.ball.x>ARENA.width*.52;
-  if(profile==='defensive')return{x:ownGoal+(game.ball.x-ownGoal)*.52,y:ARENA.height/2+(game.ball.y-ARENA.height/2)*.72};
+  if(profile==='defensive')return{x:ownGoal+(game.ball.x-ownGoal)*.3,y:ARENA.height/2+(game.ball.y-ARENA.height/2)*.58};
   if(profile==='counter'&&ballThreat)return{x:ownGoal+(game.ball.x-ownGoal)*.6,y:game.ball.y};
   if(profile==='aggressive')return{x:predicted.x-attack*62,y:predicted.y};
   if(profile==='technical')return{x:predicted.x-attack*28,y:predicted.y+Math.sin(game.elapsed*1.7)*18};
