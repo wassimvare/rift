@@ -1,0 +1,8 @@
+{
+  "name": "rift-exchange",
+  "version": "0.0.1-phase0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}
