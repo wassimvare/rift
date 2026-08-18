@@ -19,7 +19,6 @@ const progression = new ProgressionService(store);
 const network = new LocalNetworkGateway();
 const ai = new AISystem();
 
-let engine!: GameEngine;
 const actions: UiActions = {
   play: () => engine.startMatch(),
   pause: () => engine.pause(),
@@ -38,6 +37,6 @@ const actions: UiActions = {
 
 const ui = new UiController(actions);
 const renderer = new Renderer(qs<HTMLCanvasElement>('#cv'), () => store.get().settings);
-engine = new GameEngine(store, input, ui, renderer, sfx, market, progression, network, ai);
+const engine = new GameEngine(store, input, ui, renderer, sfx, market, progression, network, ai);
 
 Object.assign(window, { rift: { engine, store } });
