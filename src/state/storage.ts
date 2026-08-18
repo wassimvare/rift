@@ -50,7 +50,8 @@ export function migrateState(raw:unknown,legacyCredits?:number):PlayerState{
     return base;
   }
   const input=raw as Partial<PlayerState>&{mode?:ModeId;inv?:unknown[];equipped?:PlayerState['equippedItems']};
-  const mode=input.selectedMode??input.mode;
+  const rawMode=(input.selectedMode??input.mode) as string|undefined;
+  const mode=(rawMode==='quick'?'duel':rawMode) as ModeId|undefined;
   const tutorial=input.tutorial&&typeof input.tutorial==='object'?input.tutorial:{};
   return{
     ...base,
